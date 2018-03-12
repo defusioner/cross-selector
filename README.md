@@ -1,6 +1,9 @@
 ## About
 Simple cross-domain css selectors
 
+## Install
+`npm i cross-selector`
+
 ## Usage
 
 ```javascript 1.8
