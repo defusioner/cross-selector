@@ -16,4 +16,22 @@ const select = (url, selector) => {
   });
 };
 
-module.exports = select;
+const selectAll = (url, selector, callback) => {
+  return new Promise((resolve, reject) => {
+    request(url, function (error, response, html) {
+      if (!error && response.statusCode === 200) {
+        const $ = cheerio.load(html);
+        const items = $(selector);
+
+        resolve(callback(cheerio, items))
+      } else {
+        reject(error);
+      }
+    });
+  });
+};
+
+module.exports = {
+  select,
+  selectAll
+};
