@@ -7,7 +7,9 @@ const select = (url, selectors, callback) => {
       if (!error && response.statusCode === 200) {
         const $ = cheerio.load(html);
 
-        const items = $(selectors.join(','));
+        const allSelectors = selectors.constructor === Array ? selectors.join(',') : selectors;
+
+        const items = $(allSelectors);
 
         resolve(callback(cheerio, items))
       } else {
