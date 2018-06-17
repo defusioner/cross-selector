@@ -1,6 +1,6 @@
 {
   "name": "cross-selector",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Simple cross-domain css selectors",
   "main": "index.js",
   "repository": {
