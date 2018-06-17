@@ -6,17 +6,15 @@ Simple cross-domain css selectors
 
 ## Usage
 
-```javascript 1.8
-const select = require('cross-selector');
- 
-async function main() {
-  let res = await select(
-    'https://www.apple.com/shop/buy-mac/macbook-pro', 
-    '.as-macbundle-modelspecs li'
-  );
- 
-  if (res.includes("8th-generation")) {
-    console.log('New Mac available!')
-  }
+```
+import {select} from 'cross-selector';
+
+const callback = (cheerio, results) => {
+  if (cheerio(results).text().includes("8th-generation"))
+    return `Available!`;
+  else
+    return 'No new macs for today...';
 }
+
+select("www.applesite.com", '.as-macbundle-modelspecs li', callback);
 ```
