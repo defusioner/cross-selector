@@ -1,7 +1,11 @@
 const cheerio = require('cheerio');
 const request = require('request');
 
-const select = (url, selectors, callback) => {
+const select = ({url, selectors, callback}) => {
+  if (!url) return Promise.reject(new Error('url is required!'));
+  if (!selectors) return Promise.reject(new Error('selectors are required!'));
+  if (!callback) return Promise.reject(new Error('callback is required!'));
+
   return new Promise((resolve, reject) => {
     request(url, (error, response, html) => {
       if (!error && response.statusCode === 200) {
