@@ -14,7 +14,7 @@ const callback = (cheerio, results) => {
   return articles;
 };
 
-select(url, selectors, callback).then(articles => {
+select({url, selectors, callback}).then(articles => {
   console.log(articles)
 });
 
