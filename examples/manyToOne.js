@@ -1,9 +1,9 @@
-const select = require('.').select;
+const select = require('..').select;
 
 const url = 'http://football.ua/';
 const selectors = [".main-news ul li a", ".main-article .text h3 a"];
 
-const callback = (cheerio, results) => {
+const callbackArticles = (cheerio, results) => {
   let articles = [];
   results.each((i, elem) => {
     articles = [...articles, {
@@ -14,8 +14,6 @@ const callback = (cheerio, results) => {
   return articles;
 };
 
-select({url, selectors, callback}).then(articles => {
-  console.log(articles)
+select({url, selectors, callbacks: callbackArticles}).then(results => {
+  console.log(results);
 });
-
-
