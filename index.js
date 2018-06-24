@@ -1,27 +1,52 @@
 const cheerio = require('cheerio');
 const request = require('request');
 
-const select = ({url, selectors, callback}) => {
-  if (!url) return Promise.reject(new Error('url is required!'));
-  if (!selectors) return Promise.reject(new Error('selectors are required!'));
-  if (!callback) return Promise.reject(new Error('callback is required!'));
+const select = ({url, selectors, callbacks}) => {
+  if (!url) return promiseError('url is required!');
+  if (!selectors) return promiseError('selectors are required!');
+  if (!callbacks) return promiseError('callback is required!');
+
+  if (callbacks.constructor === Array) {
+    if (selectors.constructor !== Array) {
+      return promiseError('In this configuration (array of callbacks), selectors should be an array!')
+    }
+    if (selectors.length !== callbacks.length) {
+      return promiseError('Selectors and callbacks sizes are different!')
+    }
+  }
 
   return new Promise((resolve, reject) => {
     request(url, (error, response, html) => {
       if (!error && response.statusCode === 200) {
         const $ = cheerio.load(html);
 
-        const allSelectors = selectors.constructor === Array ? selectors.join(',') : selectors;
+        let result;
 
-        const items = $(allSelectors);
+        if (selectors.constructor !== Array) {
+          // Simple case, 1 selector = 1 callback
+          result = callbacks(cheerio, $(selectors))
+        } else if (callbacks.constructor === Array) {
+          // Complex case, many to many
+          result = selectors.reduce((total, selector, i) => [...total, runCallback($, selector, callbacks[i])], [])
+        } else {
+          // Many selectors, common callback
+          result = runCallback($, selectors, callbacks);
+        }
 
-        resolve(callback(cheerio, items))
+        resolve(result)
       } else {
         reject(error);
       }
     });
   });
 };
+
+const runCallback = ($, selector, callback) => {
+  const allSelectors = selector.constructor === Array ? selector.join(',') : selector;
+  return callback(cheerio, $(allSelectors));
+};
+
+const promiseError = message => Promise.reject(new Error(message));
 
 module.exports = {
   select
