@@ -1,7 +1,10 @@
 const select = require('..').select;
 
-const url = 'http://football.ua/';
-const selectors = [".main-news ul li a", ".main-article .text h3 a"];
+const url = 'https://www.bbc.com/news';
+const selectors = [
+  '.nw-c-top-stories__secondary-item a.gs-c-promo-heading',
+  '.nw-c-full-story .gs-c-promo .gs-c-promo-body a.gs-c-promo-heading'
+];
 
 const callbackArticles = (cheerio, results) => {
   let articles = [];

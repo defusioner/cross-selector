@@ -1,9 +1,9 @@
 const select = require('..').select;
 
-const url = 'http://football.ua/';
+const url = 'https://www.bbc.com/news';
 const selectors = [
-  [".main-news ul li a", ".main-article .text h3 a"],
-  '#matchCenterBlock tr'
+  '.nw-c-top-stories__secondary-item a.gs-c-promo-heading',
+  '.nw-c-full-story .gs-c-promo .gs-c-promo-body a.gs-c-promo-heading'
 ];
 
 const callbackArticles = (cheerio, results) => {
@@ -17,28 +17,20 @@ const callbackArticles = (cheerio, results) => {
   return articles;
 };
 
-const callbackGames = (cheerio, results) => {
-  let games = [];
+const callbackSources = (cheerio, results) => {
+  let articles = [];
   results.each((i, elem) => {
-    const element = cheerio(elem);
-
-    const time = element.find('.time');
-    const team1 = element.find('.left-team');
-    const team2 = element.find('.right-team');
-    const score = element.find('.score .score-holder > a');
-
-    const game = `${time.text().trim()} ${team1.text().trim()} ${score.text().trim()} ${team2.text().trim()}`.trim();
-
-    if (game) {
-      games = [...games, game]
-    }
+    articles = [...articles, {
+      source: cheerio(elem).attr('href'),
+      text: cheerio(elem).text().trim()
+    }];
   });
-  return games;
+  return articles;
 };
 
 const callbacks = [
   callbackArticles,
-  callbackGames
+  callbackSources
 ];
 
 select({url, selectors, callbacks}).then(results => {
