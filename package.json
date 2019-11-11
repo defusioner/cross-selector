@@ -1,7 +1,11 @@
 {
   "name": "cross-selector",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Simple cross-domain css selectors",
+  "keywords": [
+    "web scrapping",
+    "css selectors"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "repository": {
