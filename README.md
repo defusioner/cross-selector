@@ -2,6 +2,8 @@
 
 Simple cross-domain css selectors.
 
+Based on cheerio.
+
 This library is primarily used to web scrapping, letting to associate each css selector with a post-processor callback.
 
 In case of server error, it just rejects with it.

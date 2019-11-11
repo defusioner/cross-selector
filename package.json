@@ -1,8 +1,9 @@
 {
   "name": "cross-selector",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Simple cross-domain css selectors",
   "keywords": [
+    "cheerio",
     "web scrapping",
     "css selectors"
   ],
