@@ -1,78 +1,27 @@
 ## About
-Simple cross-domain css selectors
+
+Simple cross-domain css selectors.
+
+This library is primarily used to web scrapping, letting to associate each css selector with a post-processor callback.
+
+In case of server error, it just rejects with it.
 
 ## Install
-`npm i cross-selector`
+
+`npm i --save cross-selector`
 
 ## Usage
 
+`import select from 'cross-selector'`
+
+or
+
+`const select = require('cross-selector')`
+
+There are 3 modes of usage:
+
 - One selector, one callback (hackernews articles)
+- Many selectors, one callback (bbc favourites + ordinary news)
+- Many selectors, many callbacks (bbc articles + bbc sources)
 
-```
-import {select} from 'cross-selector';
-
-const url = 'https://news.ycombinator.com/';
-const selectors = '.athing .title > a';
-
-const callback = (cheerio, results) => {
-  let articles = [];
-  results.each((i, elem) => {
-    articles = [...articles, {
-      url: cheerio(elem).attr('href'),
-      text: cheerio(elem).text().trim()
-    }];
-  });
-  return articles;
-};
-
-select({url, selectors, callbacks: callback}).then(result => {
-  console.log(result);
-});
-```
-
-- Many selectors, one callback
-```
-const selectors = [
-  '.nw-c-top-stories__secondary-item a.gs-c-promo-heading',
-  '.nw-c-full-story .gs-c-promo .gs-c-promo-body a.gs-c-promo-heading'
-];
-
-select({url, selectors, callbacks: callbackArticles}).then(results => {
-  console.log(results);
-});
-
-```
-
-- Many selectors, many callbacks
-```
-const selectors = [
-  '.nw-c-top-stories__secondary-item a.gs-c-promo-heading',
-  '.nw-c-full-story .gs-c-promo .gs-c-promo-body a.gs-c-promo-heading'
-];
-
-const callbackArticles = (cheerio, results) => {
-  let articles = [];
-  results.each((i, elem) => {
-    articles = [...articles, {
-      url: cheerio(elem).attr('href'),
-      text: cheerio(elem).text().trim()
-    }];
-  });
-  return articles;
-};
-
-const callbackSources = (cheerio, results) => {
-  let articles = [];
-  results.each((i, elem) => {
-    articles = [...articles, {
-      source: cheerio(elem).attr('href'),
-      text: cheerio(elem).text().trim()
-    }];
-  });
-  return articles;
-};
-
-select({url, selectors, callbacks: [callbackArticles, callbackSources]}).then(results => {
-  console.log(results)
-});
-```
+For code examples, see tests.
